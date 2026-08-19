@@ -24,6 +24,7 @@ export default defineConfig({
 			},
 		],
 		logo: {
+
 			src: './src/assets/my-logo.png',
 			replacesTitle: true,
 		},
