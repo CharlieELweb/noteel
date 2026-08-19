@@ -1,0 +1,50 @@
+---
+import MyIcon from "./MyIcon.astro"
+
+interface Props {
+	title: string
+	eyebrow?: string
+	description?: string
+	icon?: string
+}
+
+const { title, description, icon, eyebrow = "Chapter" } = Astro.props
+---
+
+<div class="chapter">
+	<div class="chapter-hero">
+		{icon && <MyIcon name={icon} size="6rem" color="var(--sl-color-secondary)" fill />}
+		<div class="chapter-heading">
+			<p class="eyebrow">{eyebrow}</p>
+			<h3>{title}</h3>
+			{description && <p>{description}</p>}
+		</div>
+	</div>
+	<div class="chapter-body">
+		<slot />
+	</div>
+</div>
+
+<style>
+	.chapter {
+		display: flex;
+		flex-direction: column;
+		background-color: var(--sl-color-secondary-bg-low);
+		border: 2px solid var(--sl-color-secondary);
+		border-radius: var(--gap-lg);
+		padding: var(--gap-lg);
+		gap: var(--gap-xl);
+	}
+	.chapter-hero {
+		display: flex;
+		gap: var(--gap-lg);
+	}
+	.chapter-heading {
+		display: flex;
+		flex-direction: column;
+	}
+	.chapter-heading h3,
+	p {
+		margin-top: 0;
+	}
+</style>

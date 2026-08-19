@@ -1,0 +1,31 @@
+---
+interface Props {
+	src: string
+	height?: string
+}
+
+const { src, height = "420px" } = Astro.props
+---
+
+<div class="desmos" style=`height: ${height};`>
+	<iframe src=`https://www.desmos.com/notebook/${src}/view` scrolling="no"></iframe>
+</div>
+
+<style>
+	.desmos {
+		overflow: hidden;
+		position: relative;
+	}
+	.desmos iframe {
+		width: 100%;
+		height: calc(100% + 130px);
+		margin-top: -130px;
+		filter: invert(90%);
+	}
+
+	:root[data-theme="light"] {
+		.desmos iframe {
+			filter: none;
+		}
+	}
+</style>

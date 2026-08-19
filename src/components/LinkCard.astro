@@ -1,0 +1,95 @@
+---
+import { Icon } from "@astrojs/starlight/components"
+import MyIcon from "./MyIcon.astro"
+import type { HTMLAttributes } from "astro/types"
+
+interface Props extends Omit<HTMLAttributes<"a">, "title"> {
+	title: string
+	description?: string
+	icon?: String
+}
+
+const { title, description, icon, ...attributes } = Astro.props
+---
+
+<div class="sl-link-card button">
+	<div class="sl-flex">
+		{icon && <MyIcon name={icon} size="3rem" fill color="var(--sl-color-accent)" />}
+
+		<div class="sl-flex stack">
+			<a {...attributes}>
+				<span class="title" set:html={title} />
+			</a>
+			{description && <span class="description" set:html={description} />}
+		</div>
+	</div>
+
+	{attributes.href != "" && <Icon name="right-arrow" size="1.333em" class="icon rtl:flip" />}
+
+	{attributes.href == "" && <MyIcon name="lock" size="1.333em" fill class="icon rtl:flip" />}
+</div>
+
+<style>
+	@layer starlight.components {
+		.sl-link-card .sl-flex {
+			gap: var(--gap-md);
+			justify-content: center;
+
+			margin: 0;
+		}
+		.sl-link-card {
+			display: flex;
+			justify-content: space-between !important;
+			padding: 1rem;
+			align-items: center;
+			position: relative;
+		}
+
+		svg {
+			margin: 0;
+		}
+
+		a {
+			text-decoration: none;
+			line-height: var(--sl-line-height-headings);
+		}
+
+		/* a11y fix for https://github.com/withastro/starlight/issues/487 */
+		a::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+		}
+
+		.stack {
+			flex-direction: column;
+			gap: var(--gap-md);
+			align-items: start;
+		}
+
+		.title {
+			color: var(--sl-color-white);
+			font-weight: 600;
+			font-size: var(--sl-text-lg);
+		}
+
+		.description {
+			color: var(--sl-color-gray-3);
+			line-height: 1;
+		}
+
+		.sl-link-card .icon {
+			color: var(--sl-color-gray-3) !important;
+		}
+
+		/* Hover state */
+		.sl-link-card:hover {
+			background: var(--sl-color-gray-7, var(--sl-color-gray-6));
+			border-color: var(--sl-color-gray-2);
+		}
+
+		.sl-link-card:hover .icon {
+			color: var(--sl-color-white);
+		}
+	}
+</style>

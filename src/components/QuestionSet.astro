@@ -1,0 +1,268 @@
+---
+import MyIcon from "./MyIcon.astro"
+import resultA from "../assets/charlie/c-woah.png"
+import resultB from "../assets/charlie/c-disgust.png"
+import resultC from "../assets/charlie/c-loading.png"
+interface Props {
+	quiz?: boolean
+}
+const { quiz = false } = Astro.props
+---
+
+<div
+	class:list={["question-set", quiz ? "quiz" : ""]}
+	data-current="0"
+	data-correct="0"
+	data-incorrect="0"
+>
+	<div class="question-set-body">
+		<div class="question-set-title">
+			<div class="title">
+				<MyIcon name="quiz" size="2rem" fill />
+				{quiz ? "Quiz" : "Practice"}
+			</div>
+
+			<div class="index">(1/3)</div>
+		</div>
+		<slot />
+	</div>
+	{
+		quiz && (
+			<div class="result-body">
+				<h3 class="result-title">Congratulations!</h3>
+				<img class="resultA" src={resultA.src} />
+				<img class="resultB" src={resultB.src} />
+				<img class="resultC" src={resultC.src} />
+				<h4>
+					Correct: <span class="result-number">3/3</span>
+				</h4>
+			</div>
+		)
+	}
+
+	<div class="question-set-action">
+		<button type="button" class="button primary">Next</button>
+	</div>
+</div>
+
+<script>
+	import { string } from "astro:schema"
+
+	const questionSets = document.querySelectorAll(".question-set") as NodeListOf<HTMLDivElement>
+	questionSets.forEach((questionSet) => {
+		const nextButton = questionSet.querySelector(
+			'.question-set-action button[type="button"',
+		) as HTMLInputElement
+		nextButton.addEventListener("click", () => {
+			questionSet.dataset.current = (Number(questionSet.dataset.current) + 1).toString()
+			updateQuestionSet(questionSet)
+		})
+		const questions = questionSet.querySelectorAll(".question") as NodeListOf<HTMLFormElement>
+		questions.forEach((question) => {
+			const showAnswerButton = question.querySelector('button[type="button"') as HTMLInputElement
+			question.classList.add("no-border")
+			if (questionSet.classList.contains("quiz")) {
+				question.classList.add("quiz")
+			}
+
+			question.addEventListener("submit", () => {
+				updateQuestionSet(questionSet)
+			})
+			showAnswerButton.addEventListener("click", () => {
+				updateQuestionSet(questionSet)
+			})
+		})
+		updateQuestionSet(questionSet)
+	})
+	function updateQuestionSet(questionSet: HTMLDivElement) {
+		const index = questionSet.querySelector(".index") as HTMLDivElement
+		const current = Number(questionSet.dataset.current)
+		const nextButton = questionSet.querySelector(
+			'.question-set-action button[type="button"]',
+		) as HTMLInputElement
+		let correct = Number(questionSet.dataset.correct)
+		let incorrect = Number(questionSet.dataset.incorrect)
+
+		const questions = questionSet.querySelectorAll(".question") as NodeListOf<HTMLFormElement>
+		index.innerText = `(${current + 1} / ${questions.length})`
+		for (let i = 0; i < questions.length; i++) {
+			if (i <= current) {
+				questions[i].classList.remove("hidden")
+				if (i < current) {
+					questions[i].classList.add("minimal")
+					if (questionSet.classList.contains("quiz")) {
+						questions[i].classList.add("hidden")
+					}
+				}
+			} else {
+				questions[i].classList.add("hidden")
+			}
+		}
+
+		if (current < questions.length - 1 && questions[current].classList.contains("show")) {
+			questionSet.classList.add("next")
+			if (questionSet.classList.contains("quiz")) {
+				correct += questions[current].querySelectorAll(".correct").length
+				incorrect += questions[current].querySelectorAll(".incorrect").length
+			}
+		} else if (current == questions.length - 1 && questions[current].classList.contains("show")) {
+			if (questionSet.classList.contains("quiz")) {
+				nextButton.innerText = "Result"
+				questionSet.classList.add("next")
+				correct += questions[current].querySelectorAll(".correct").length
+				incorrect += questions[current].querySelectorAll(".incorrect").length
+			}
+		} else {
+			questionSet.classList.remove("next")
+		}
+		questionSet.dataset.correct = correct.toString()
+		questionSet.dataset.incorrect = incorrect.toString()
+		if (current == questions.length) {
+			questionSet.classList.add("result")
+			const resultBody = questionSet.querySelector(".result-body") as HTMLDivElement
+			const resultTitle = resultBody.querySelector(".result-title") as HTMLHeadingElement
+			const resultNumber = resultBody.querySelector(".result-number") as HTMLSpanElement
+			if (correct >= incorrect) {
+				resultBody.classList.add("A")
+				if (incorrect == 0) {
+					switch (Math.floor(Math.random() * 4)) {
+						case 0:
+							resultTitle.innerText = "OMG!!! You got all correct!!!"
+							break
+						case 1:
+							resultTitle.innerText = "Perfecto!"
+							break
+						case 2:
+							resultTitle.innerText = "A+!!!"
+							break
+						case 3:
+							resultTitle.innerText = "Full marks!!!"
+							break
+					}
+				} else {
+					switch (Math.floor(Math.random() * 4)) {
+						case 0:
+							resultTitle.innerText = "Well done!"
+							break
+						case 1:
+							resultTitle.innerText = "Bravo!"
+							break
+						case 2:
+							resultTitle.innerText = "Bien Hecho!"
+							break
+						case 3:
+							resultTitle.innerText = "善哉！"
+							break
+					}
+				}
+			} else if (correct > 0) {
+				switch (Math.floor(Math.random() * 4)) {
+					case 0:
+						resultTitle.innerText = "Well, at least some are correct..."
+						break
+					case 1:
+						resultTitle.innerText = "Not bad, but..."
+						break
+					case 2:
+						resultTitle.innerText = "Keep going!"
+						break
+					case 3:
+						resultTitle.innerText = "Better luck next time!"
+						break
+				}
+
+				resultBody.classList.add("B")
+			} else {
+				switch (Math.floor(Math.random() * 4)) {
+					case 0:
+						resultTitle.innerText = "You gonna be kidding me..."
+						break
+					case 1:
+						resultTitle.innerText = "Are you serious?"
+						break
+					case 2:
+						resultTitle.innerText = "Are you Robot?"
+						break
+					case 3:
+						resultTitle.innerText = "..."
+						break
+				}
+
+				resultBody.classList.add("C")
+			}
+
+			resultNumber.innerText = `${correct}/${correct + incorrect}`
+		}
+	}
+</script>
+
+<style>
+	.question-set {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap-xxl);
+		margin: var(--gap-lg) 0;
+		border-radius: var(--gap-lg);
+		border: 2px solid var(--sl-color-secondary);
+		padding: var(--gap-xl);
+	}
+
+	.title {
+		display: flex;
+		align-items: center;
+
+		font-weight: bolder;
+		font-size: var(--sl-text-xl);
+		gap: var(--gap-md);
+		margin: 0;
+	}
+	.index {
+		margin: 0;
+	}
+	.question-set.result .index {
+		display: none;
+	}
+	.question-set-title {
+		display: flex;
+		align-items: center;
+		gap: var(--gap-md);
+		color: var(--sl-color-secondary);
+		font-size: var(--sl-text-xl);
+	}
+	.question-set-action {
+		display: none;
+		gap: var(--gap-lg);
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+	}
+	.question-set.next .question-set-action {
+		display: flex;
+	}
+	.question-set-action > * {
+		width: 100%;
+		margin: 0;
+	}
+	.question-set .result-body {
+		display: none;
+		flex-direction: column;
+		align-items: center;
+	}
+	.question-set.result .result-body {
+		display: flex;
+	}
+	.question-set .result-body img {
+		display: none;
+		width: 50%;
+		max-width: 20rem;
+	}
+	.question-set .result-body.A img.resultA {
+		display: flex;
+	}
+	.question-set .result-body.B img.resultB {
+		display: flex;
+	}
+	.question-set .result-body.C img.resultC {
+		display: flex;
+	}
+</style>

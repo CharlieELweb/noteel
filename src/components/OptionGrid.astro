@@ -1,0 +1,16 @@
+<div class="option-grid">
+	<slot />
+</div>
+
+<style>
+	.option-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+		gap: var(--gap-md);
+	}
+	@media (max-width: 50rem) {
+		.option-grid {
+			grid-template-columns: repeat(auto-fit, minmax(45%, 1fr));
+		}
+	}
+</style>

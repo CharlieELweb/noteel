@@ -1,26 +1,56 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import { unified } from "@astrojs/markdown-remark";
+import remarkMath from 'remark-math';
+import rehypeMathjax from 'rehype-mathjax';
+import starlightGiscus from 'starlight-giscus'
 
-// https://astro.build/config
 export default defineConfig({
-	integrations: [
-		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
-			sidebar: [
-				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
+	site: 'https://charlieelweb.github.io',
+	base: '/noteel/',
+	integrations: [starlight({
+		title: 'NoteEL',
+		routeMiddleware: './src/routeData.ts',
+		head: [
+			{
+				tag: 'link',
+				attrs: {
+					href: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200',
+					rel: 'stylesheet',
 				},
-				{
-					label: 'Reference',
-					items: [{ autogenerate: { directory: 'reference' } }],
-				},
-			],
-		}),
+			},
+		],
+		logo: {
+			src: './src/assets/my-logo.png',
+			replacesTitle: true,
+		},
+
+		customCss: [
+			// Relative path to your custom CSS file
+			'./src/styles/overrides.css',
+			'@fontsource-variable/chiron-goround-tc'
+		],
+		components: {
+			Header: './src/components/Header.astro',
+			Hero: './src/components/Hero.astro',
+			PageTitle: './src/components/PageTitle.astro',
+			Pagination: './src/components/Pagination.astro',
+		},
+		plugins: [
+			starlightGiscus({
+				repo: 'charlieelweb/noteel',
+				repoId: 'repository_id_from_giscus',
+				category: 'category_name_from_github_discussions',
+				categoryId: 'category_id_from_giscus'
+			})
+		],
+	}),
 	],
+	markdown: {
+		processor: unified({
+			remarkPlugins: [remarkMath],
+			rehypePlugins: [rehypeMathjax],
+		})
+	}
 });

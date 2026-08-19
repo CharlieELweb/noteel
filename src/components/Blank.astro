@@ -1,0 +1,25 @@
+---
+interface Props {
+	answer: string
+	number?: boolean
+}
+
+const { answer, number = false } = Astro.props
+---
+
+<input type={number ? "number" : "text"} step="any" class="blank" data-answer={answer} />
+
+<style>
+	.blank.correct {
+		--color-bg: var(--sl-color-green-low);
+		--color-border: var(--sl-color-green);
+		color: var(--sl-color-green);
+		animation: jump 0.5s ease;
+	}
+	.blank.incorrect {
+		--color-bg: var(--sl-color-red-low);
+		--color-border: var(--sl-color-red);
+		color: var(--sl-color-red);
+		animation: shake 0.3s ease;
+	}
+</style>

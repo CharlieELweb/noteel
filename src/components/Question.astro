@@ -1,0 +1,166 @@
+---
+import MyIcon from "./MyIcon.astro"
+---
+
+<form class="question">
+	<div class="question-body">
+		<div class="question-title">
+			<MyIcon name="help_center" size="2rem" fill />
+			Practice
+		</div>
+		<slot />
+	</div>
+	<div class="question-action">
+		<button type="button" class="button secondary">Show Answer</button>
+		<button class="button primary" type="submit">Submit</button>
+	</div>
+</form>
+
+<script>
+	const questions = document.querySelectorAll("form.question") as NodeListOf<HTMLFormElement>
+	questions.forEach((question) => {
+		updateQuestion(question)
+		const showAnswerButton = question.querySelector('button[type="button"') as HTMLInputElement
+
+		const blanks = question.querySelectorAll(".blank") as NodeListOf<HTMLInputElement>
+		question.addEventListener("submit", handleSubmit)
+		showAnswerButton.addEventListener("click", () => {
+			showAnswer(question)
+		})
+		blanks.forEach((blank) => {
+			blank.addEventListener("input", () => {
+				blank.classList.remove("incorrect")
+				updateQuestion(question)
+			})
+		})
+	})
+
+	function showAnswer(question: HTMLFormElement) {
+		question.classList.add("show")
+		if (question.classList.contains("quiz")) {
+		} else {
+			const blanks = question.querySelectorAll(".blank") as NodeListOf<HTMLInputElement>
+			blanks.forEach((blank) => {
+				blank.disabled = true
+				blank.classList.remove("incorrect")
+				blank.value = blank.dataset.answer || ""
+			})
+			const options = question.querySelectorAll(".option") as NodeListOf<HTMLLabelElement>
+			options.forEach((option) => {
+				const optionInput = option.querySelector("input") as HTMLInputElement
+				optionInput.disabled = true
+				if (option.dataset.answer == "true") {
+					option.classList.add("correct")
+				}
+			})
+		}
+	}
+	function updateQuestion(question: HTMLFormElement) {
+		const submitButton = question.querySelector('button[type="submit"') as HTMLInputElement
+		submitButton.disabled = !canSubmit(question)
+	}
+	function canSubmit(question: HTMLFormElement) {
+		let result = true
+		const blanks = question.querySelectorAll(".blank") as NodeListOf<HTMLInputElement>
+		blanks.forEach((blank) => {
+			if (blank.value.trim() == "") {
+				result = false
+			}
+		})
+		return result
+	}
+	function handleSubmit(event: Event) {
+		event.preventDefault()
+		const question = event.target as HTMLFormElement
+		let correct = true
+		const blanks = question.querySelectorAll(".blank") as NodeListOf<HTMLInputElement>
+		blanks.forEach((blank) => {
+			if (blank.value == blank.dataset.answer) {
+				blank.disabled = true
+				blank.classList.add("correct")
+			} else {
+				if (question.classList.contains("quiz")) {
+					blank.disabled = true
+				}
+				blank.classList.add("incorrect")
+				correct = false
+			}
+		})
+		const options = question.querySelectorAll(".option") as NodeListOf<HTMLLabelElement>
+		options.forEach((option) => {
+			const optionInput = option.querySelector("input") as HTMLInputElement
+			if (optionInput.checked == true) {
+				optionInput.disabled = true
+				if (option.dataset.answer == "true") {
+					option.classList.add("correct")
+				} else {
+					option.classList.add("incorrect")
+					correct = false
+				}
+			}
+		})
+		if (correct || question.classList.contains("quiz")) {
+			showAnswer(question)
+		}
+	}
+</script>
+
+<style>
+	.question {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gap-xxl);
+		margin: var(--gap-lg) 0;
+		border-radius: var(--gap-lg);
+		border: 2px solid var(--sl-color-secondary);
+		padding: var(--gap-xl);
+	}
+	.question.hidden {
+		display: none;
+	}
+	.question.no-border {
+		border: 0;
+		padding: 0;
+		margin: 0;
+		animation: fade-in 1s ease;
+	}
+	.question.no-border .question-title {
+		display: none;
+	}
+	.question.show .question-action {
+		display: none;
+	}
+	.quiz .question-action button[type="button"] {
+		display: none;
+	}
+	.question-title {
+		display: flex;
+		align-items: center;
+		color: var(--sl-color-secondary);
+		font-weight: bolder;
+		font-size: var(--sl-text-xl);
+		gap: var(--gap-md);
+	}
+	.question-action {
+		display: flex;
+		gap: var(--gap-lg);
+		width: 100%;
+		max-width: 400px;
+		margin: 0 auto;
+	}
+	.question-action > * {
+		width: 100%;
+		margin: 0;
+	}
+
+	@keyframes fade-in {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
+		}
+	}
+</style>

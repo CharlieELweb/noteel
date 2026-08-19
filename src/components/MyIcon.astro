@@ -1,0 +1,23 @@
+---
+interface Props {
+	name: string
+	fill?: boolean
+	color?: string
+	size?: string
+	class?: string
+}
+
+const { name, fill = false, size = "1em", color } = Astro.props
+---
+
+<span class:list={["material-symbols-rounded", Astro.props.class]} aria-hidden>{name}</span>
+
+<style define:vars={{ "sl-icon-color": color, "sl-icon-size": size, "sl-fill": fill ? 1 : 0 }}>
+	.material-symbols-rounded {
+		font-variation-settings: "FILL" var(--sl-fill);
+		color: var(--sl-icon-color);
+		font-size: var(--sl-icon-size, 1em);
+		width: 1em;
+		height: 1em;
+	}
+</style>
