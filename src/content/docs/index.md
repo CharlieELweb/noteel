@@ -9,7 +9,7 @@ hero:
     file: ../../assets/mascot/m-big.png
   actions:
     - text: Start Learning
-      link: ./notes
+      link: notes
       icon: right-arrow
 ---
 
