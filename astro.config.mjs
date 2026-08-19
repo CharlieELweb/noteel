@@ -8,12 +8,12 @@ import starlightGiscus from 'starlight-giscus'
 
 export default defineConfig({
 	site: 'https://charlieelweb.github.io',
-	base: '/noteel/',
+	base: '/noteel',
 
 	integrations: [starlight({
 		title: 'NoteEL',
 		routeMiddleware: './src/routeData.ts',
-		favicon: '/favicon.ico',
+		favicon: '/noteel/favicon.ico',
 		head: [
 			{
 				tag: 'link',
@@ -42,9 +42,9 @@ export default defineConfig({
 		plugins: [
 			starlightGiscus({
 				repo: "charlieelweb/noteel",
-				repoId: "R_kgDOT9UMgg",
+				repoId: "R_kgDOT9X-jw",
 				category: "Comment",
-				categoryId: "DIC_kwDOT9UMgs4DDtgr",
+				categoryId: "DIC_kwDOT9X-j84DDtrC",
 				lazy: true,
 			})
 		],
