@@ -9,6 +9,7 @@ export const collections = {
 			extend: z.object({
 				eyebrow: z.string().optional(),
 				icon: z.string().optional(),
+				giscus: z.boolean().optional().default(true),
 			}),
 		})
 	}),

@@ -274,6 +274,14 @@
 		text-decoration: none;
 	}
 
+	.explain {
+		display: none;
+	}
+
+	.show .explain {
+		display: block !important;
+	}
+
 	.button {
 		--border-width: 2px;
 		--color-border: var(--sl-color-gray-5);

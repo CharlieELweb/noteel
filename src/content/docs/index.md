@@ -2,6 +2,7 @@
 title: NoteEL
 description: A space for knowledge and fun!
 template: splash
+giscus: false
 hero:
   tagline: A space for knowledge and fun!
   image:

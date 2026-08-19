@@ -19,6 +19,8 @@ import QuestionSet from '@components/QuestionSet.astro'
 
 import MyIcon from '@components/MyIcon.astro'
 
+import Explain from '@components/Explain.astro';
+
 ## Point
 
 In Coordinate Geometry, every point is represented by a pair of numbers, called **<u>coordinates</u>**.
@@ -234,7 +236,7 @@ $$
 
 ![question4](./image/question1-4.svg)
 
-To find the slope of line, we need transform it to the form like $y=mx+b$ (slope-intercept form).
+To dirrectly find the slope of a line, we need transform it to the form like $y=mx+b$ (slope-intercept form).
 
 The slope-intercept form of line $L_1$ is $y=$ <Blank number answer="0.5" /> $x$ + <Blank number answer="1.5" />
 
@@ -343,29 +345,87 @@ The coordinates of the midpoint $M$ is: $($ <Blank number answer="0" /> $,$ <Bla
 
 The length of the line segment $d$ is: <Blank number answer="10" />
 
+<Explain>
+
+The x-coordinate of midpoint $M$ is $\frac{3 + (-3)}{2}=0$.
+
+The y-coordinate of midpoint $M$ is $\frac{6 + (-2)}{2}=2$.
+
+The x-coordinates difference is: $x_0=(-3)-(3)=-6$.
+
+The y-coordinates difference is: $y_0=(-2)-(6)=-8$.
+
+Based on the Pythagorean Theorem, the distance is: $d=\sqrt{(-6)^2+(-8)^2} =10$.
+
+The answer is: $M(0, 2)$; $d=10$.
+
+</Explain>
+
 </Question>
 
 <Question>
 
-#### Find the equation of the line which is parallel to line $L_1: y=5x+4$ and cuts the $y$-axis at $A(0, 2)$.
+#### Find the equation of the line $L$ which is parallel to line $L_1: y=5x+4$ and cuts the $y$-axis at $A(0, 2)$.
 
-The equation of the line is: $y=$ <Blank number answer="5" /> $x+$ <Blank number answer="2" />
+The equation of the line $L$ is: $y=$ <Blank number answer="5" /> $x+$ <Blank number answer="2" />
+
+<Explain>
+
+The slope of $L_1$ is $m_1=5$.
+
+Since $L \parallel L_1$, the slope of the line $m=m_1=5$.
+
+Line $L$ is passing through $A(0, 2)$, so $\frac{y-2}{x-0}=5$.
+
+The answer is: $y=5x+2$.
+
+</Explain>
 
 </Question>
 
 <Question>
 
-#### Find the equation of the line passing through $A(3, 5)$ and $B(1, -2)$.
+#### Find the equation of the line $L$ passing through $A(3, 5)$ and $B(1, -2)$.
 
-The equation of the line is: <Blank number answer="7" /> $x+$ <Blank number answer="-2" /> $y+$ <Blank number answer="-4" /> $=0$
+The equation of the line $L$ is: <Blank number answer="7" /> $x+$ <Blank number answer="-2" /> $y+$ <Blank number answer="-11" /> $=0$
+
+<Explain>
+
+The x-coordinates difference is: $x_0=1-3=-2$.
+
+The y-coordinates difference is: $y_0=(-2)-(5)=-7$.
+
+Thus, the slope of $L$ is: $m=\frac{y_0}{x_0}=\frac{7}{2}$
+
+Line $L$ is passing through $A(3, 5)$, so $\frac{y-5}{x-3}=\frac{7}{2}$.
+
+The answer is: $7x-2y-11=0$
+
+</Explain>
 
 </Question>
 
 <Question>
 
-#### Find the equation of the line which passes through the point $A(−6, 1)$ and is perpendicular to the line $L_1: 5x+3y-7=0$.
+#### Find the equation of the line $L$ which passes through the point $A(−6, 1)$ and is perpendicular to the line $L_1: 5x+3y-7=0$.
 
-The equation of the line is: <Blank number answer="-3" /> $x+$ <Blank number answer="5" /> $y+$ <Blank number answer="-23" /> $=0$
+The equation of the line $L$ is: <Blank number answer="-3" /> $x+$ <Blank number answer="5" /> $y+$ <Blank number answer="-23" /> $=0$
+
+<Explain>
+
+The slope-intercept form of line $L_1$ is $y=-\frac{5}{3}x+\frac{7}{3}$
+
+Thus, the slope of $L_1$ is: $m_1=-\frac{5}{3}$
+
+Since $L \parallel L_1$, we have $m\cdot m_1 = -1$
+
+So the slope of $L$ is $m=-\frac{1}{m_1}=\frac{3}{5}$
+
+Line $L$ is passing through $A(-6, 1)$, so $\frac{y-1}{x-(-6)}=\frac{3}{5}$.
+
+The answer is: $-3x+5y-23=0$
+
+</Explain>
 
 </Question>
 
